@@ -8,10 +8,6 @@ RUN apt update && \
   apt upgrade -y && \
   apt install -y wget curl autoconf bison build-essential libffi-dev libgdbm-dev libncurses5-dev libssl-dev libyaml-dev libreadline6-dev zlib1g-dev git
 
-# Install dockerize to wait for mongodb/elasticsearch availability
-# https://hub.docker.com/r/powerman/dockerize/tags
-COPY --from=docker.io/powerman/dockerize:0.19.0 /usr/local/bin/dockerize /usr/local/bin/dockerize
-
 # Create unprivileged "app" user
 # From then on, run as unprivileged app user
 RUN useradd --home-dir /app --create-home --shell /bin/bash --uid 1000 app
@@ -41,10 +37,6 @@ COPY --link --chown=1000:1000 --from=forum-src / /app/cs_comments_service
 WORKDIR /app/cs_comments_service
 RUN bundle config set --local deployment 'true'
 RUN bundle install
-
-COPY --chown=app:app ./bin/docker-entrypoint.sh /app/bin/docker-entrypoint.sh
-RUN chmod a+x /app/bin/docker-entrypoint.sh
-ENTRYPOINT ["/app/bin/docker-entrypoint.sh"]
 
 ENV SINATRA_ENV=staging
 ENV NEW_RELIC_ENABLE=false
