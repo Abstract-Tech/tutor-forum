@@ -1,4 +1,4 @@
-FROM docker.io/ruby:2.5.7-slim-stretch
+FROM docker.io/ruby:2.5.7-slim-buster
 MAINTAINER Overhang.IO <contact@overhang.io>
 
 ENV DEBIAN_FRONTEND=noninteractive
@@ -29,7 +29,7 @@ RUN gem install --user-install bundler --version 1.17.3
 RUN gem install --user-install rake --version 13.0.1
 
 # Install forum
-RUN git clone https://github.com/edx/cs_comments_service.git --branch {{ OPENEDX_COMMON_VERSION }} --depth 1 /app/cs_comments_service
+RUN git clone https://github.com/abstract-tech/cs_comments_service.git --branch nutmeg-fix --depth 1 /app/cs_comments_service
 WORKDIR /app/cs_comments_service
 RUN bundle install --deployment
 
